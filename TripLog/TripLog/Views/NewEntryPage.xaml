@@ -9,19 +9,32 @@
     mc:Ignorable="d">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Save" />
+        <ToolbarItem Command="{Binding SaveCommand}" Text="Save" />
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
         <TableView Intent="Form">
             <TableView.Root>
                 <TableSection>
-                    <EntryCell Label="Title" />
-                    <EntryCell Keyboard="Numeric" Label="Latitude" />
-                    <EntryCell Keyboard="Numeric" Label="Longitude" />
-                    <EntryCell Label="Date" />
-                    <EntryCell Keyboard="Numeric" Label="Rating" />
-                    <EntryCell Label="Notes" />
+                    <EntryCell
+                        x:Name="title"
+                        Label="Title"
+                        Text="{Binding Title}" />
+                    <EntryCell
+                        Keyboard="Numeric"
+                        Label="Latitude"
+                        Text="{Binding Latitude}" />
+                    <EntryCell
+                        Keyboard="Numeric"
+                        Label="Longitude"
+                        Text="{Binding Longitude}" />
+                    <EntryCell Label="Date" Text="{Binding Date, StringFormat='{0:d}'}" />
+                    <EntryCell
+                        x:Name="rating"
+                        Keyboard="Numeric"
+                        Label="Rating"
+                        Text="{Binding Rating}" />
+                    <EntryCell Label="Notes" Text="{Binding Notes}" />
                 </TableSection>
             </TableView.Root>
         </TableView>

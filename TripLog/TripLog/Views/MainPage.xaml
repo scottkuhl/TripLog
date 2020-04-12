@@ -16,6 +16,7 @@
         <CollectionView
             x:Name="trips"
             SelectionChanged="Trips_SelectionChanged"
+            ItemsSource="{Binding LogEntries}"
             SelectionMode="Single">
             <CollectionView.ItemTemplate>
                 <DataTemplate>

@@ -20,10 +20,22 @@
                 BackgroundColor="White"
                 Opacity=".8" />
             <StackLayout Grid.Row="1" Padding="10">
-                <Label x:Name="title" HorizontalOptions="Center" />
-                <Label x:Name="date" HorizontalOptions="Center" />
-                <Label x:Name="rating" HorizontalOptions="Center" />
-                <Label x:Name="notes" HorizontalOptions="Center" />
+                <Label
+                    x:Name="title"
+                    HorizontalOptions="Center"
+                    Text="{Binding Entry.Title}" />
+                <Label
+                    x:Name="date"
+                    HorizontalOptions="Center"
+                    Text="{Binding Entry.Date, StringFormat='{0:M}'}" />
+                <Label
+                    x:Name="rating"
+                    HorizontalOptions="Center"
+                    Text="{Binding Entry.Rating, StringFormat='{0} star rating'}" />
+                <Label
+                    x:Name="notes"
+                    HorizontalOptions="Center"
+                    Text="{Binding Entry.Notes}" />
             </StackLayout>
         </Grid>
     </ContentPage.Content>
