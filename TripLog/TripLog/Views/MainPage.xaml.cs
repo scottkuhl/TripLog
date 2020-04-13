@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using TripLog.Models;
+﻿using TripLog.Services;
 using TripLog.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -13,23 +11,16 @@ namespace TripLog.Views
         public MainPage()
         {
             InitializeComponent();
-            BindingContext = new MainViewModel();
+            BindingContext = new MainViewModel(DependencyService.Get<INavService>());
         }
 
-        private void New_Clicked(object sender, EventArgs e)
-        {
-            Navigation.PushAsync(new NewEntryPage());
-        }
+        private MainViewModel ViewModel => BindingContext as MainViewModel;
 
-        private async void Trips_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        protected override void OnAppearing()
         {
-            var trip = (TripLogEntry)e.CurrentSelection.FirstOrDefault();
-            if (trip != null)
-            {
-                await Navigation.PushAsync(new DetailPage(trip));
-            }
-            // Clear selection
-            trips.SelectedItem = null;
+            base.OnAppearing();
+            // Initialize MainViewModel
+            ViewModel?.Init();
         }
     }
 }
