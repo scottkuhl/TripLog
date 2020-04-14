@@ -8,6 +8,7 @@ namespace TripLog.ViewModels
 {
     public class NewEntryViewModel : BaseValidationViewModel
     {
+        private readonly ILocationService _locService;
         private DateTime _date;
         private double _latitude;
         private double _longitude;
@@ -16,9 +17,11 @@ namespace TripLog.ViewModels
         private Command _saveCommand;
         private string _title;
 
-        public NewEntryViewModel(INavService navService)
+        public NewEntryViewModel(INavService navService, ILocationService locService)
             : base(navService)
         {
+            _locService = locService;
+
             Date = DateTime.Today;
             Rating = 1;
         }
@@ -89,8 +92,18 @@ namespace TripLog.ViewModels
             }
         }
 
-        public override void Init()
+        public override async void Init()
         {
+            try
+            {
+                var coords = await _locService.GetGeoCoordinatesAsync();
+                Latitude = coords.Latitude;
+                Longitude = coords.Longitude;
+            }
+            catch (Exception)
+            {
+                // TODO: handle exceptions from location service
+            }
         }
 
         private bool CanSave() => !string.IsNullOrWhiteSpace(Title) && !HasErrors;

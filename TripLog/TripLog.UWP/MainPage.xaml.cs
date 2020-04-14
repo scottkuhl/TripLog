@@ -1,4 +1,6 @@
-﻿namespace TripLog.UWP
+﻿using TripLog.UWP.Modules;
+
+namespace TripLog.UWP
 {
     public sealed partial class MainPage
     {
@@ -6,7 +8,7 @@
         {
             this.InitializeComponent();
             Xamarin.FormsMaps.Init("YOUR-MAPS-API-KEY-HERE");
-            LoadApplication(new TripLog.App());
+            LoadApplication(new TripLog.App(new TripLogPlatformModule()));
         }
     }
 }

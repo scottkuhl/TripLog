@@ -1,5 +1,4 @@
-﻿using TripLog.Services;
-using TripLog.ViewModels;
+﻿using TripLog.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -11,7 +10,6 @@ namespace TripLog.Views
         public MainPage()
         {
             InitializeComponent();
-            BindingContext = new MainViewModel(DependencyService.Get<INavService>());
         }
 
         private MainViewModel ViewModel => BindingContext as MainViewModel;

@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using TripLog.Services;
 using TripLog.ViewModels;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
@@ -13,7 +12,6 @@ namespace TripLog.Views
         public DetailPage()
         {
             InitializeComponent();
-            BindingContext = new DetailViewModel(DependencyService.Get<INavService>());
         }
 
         private DetailViewModel ViewModel => BindingContext as DetailViewModel;
