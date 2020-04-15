@@ -3,40 +3,58 @@
     x:Class="TripLog.Views.NewEntryPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:TripLog.Controls;assembly=TripLog"
+    xmlns:converters="clr-namespace:TripLog.Converters;assembly=TripLog"
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="New Entry"
     mc:Ignorable="d">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:ReverseBooleanConverter x:Key="ReverseBooleanConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Command="{Binding SaveCommand}" Text="Save" />
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
-        <TableView Intent="Form">
-            <TableView.Root>
-                <TableSection>
-                    <EntryCell
-                        x:Name="title"
-                        Label="Title"
-                        Text="{Binding Title}" />
-                    <EntryCell
-                        Keyboard="Numeric"
-                        Label="Latitude"
-                        Text="{Binding Latitude}" />
-                    <EntryCell
-                        Keyboard="Numeric"
-                        Label="Longitude"
-                        Text="{Binding Longitude}" />
-                    <EntryCell Label="Date" Text="{Binding Date, StringFormat='{0:d}'}" />
-                    <EntryCell
-                        x:Name="rating"
-                        Keyboard="Numeric"
-                        Label="Rating"
-                        Text="{Binding Rating}" />
-                    <EntryCell Label="Notes" Text="{Binding Notes}" />
-                </TableSection>
-            </TableView.Root>
-        </TableView>
+        <Grid>
+            <TableView Intent="Form" IsVisible="{Binding IsBusy, Converter={StaticResource ReverseBooleanConverter}}">
+                <TableView.Root>
+                    <TableSection>
+                        <EntryCell
+                            x:Name="title"
+                            Label="Title"
+                            Text="{Binding Title}" />
+                        <EntryCell
+                            Keyboard="Numeric"
+                            Label="Latitude"
+                            Text="{Binding Latitude}" />
+                        <EntryCell
+                            Keyboard="Numeric"
+                            Label="Longitude"
+                            Text="{Binding Longitude}" />
+                        <controls:DatePickerEntryCell Date="{Binding Date, StringFormat='{0:d}'}" Label="Date" />
+                        <EntryCell
+                            x:Name="rating"
+                            Keyboard="Numeric"
+                            Label="Rating"
+                            Text="{Binding Rating}" />
+                        <EntryCell Label="Notes" Text="{Binding Notes}" />
+                    </TableSection>
+                </TableView.Root>
+            </TableView>
+            <StackLayout
+                HorizontalOptions="Center"
+                IsVisible="{Binding IsBusy}"
+                Orientation="Vertical"
+                VerticalOptions="Center">
+                <ActivityIndicator IsRunning="True" />
+                <Label Text="Saving new entry..." />
+            </StackLayout>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

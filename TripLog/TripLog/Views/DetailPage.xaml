@@ -3,10 +3,18 @@
     x:Class="TripLog.Views.DetailPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:converters="clr-namespace:TripLog.Converters;assembly=TripLog"
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
     xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:RatingToStarImageNameConverter x:Key="RatingToStartImageNameConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
     <ContentPage.Content>
         <Grid>
             <Grid.RowDefinitions>
@@ -22,18 +30,25 @@
             <StackLayout Grid.Row="1" Padding="10">
                 <Label
                     x:Name="title"
+                    AutomationProperties.HelpText="Title of trip"
+                    AutomationProperties.IsInAccessibleTree="true"
                     HorizontalOptions="Center"
                     Text="{Binding Entry.Title}" />
                 <Label
                     x:Name="date"
+                    AutomationProperties.HelpText="Date of trip"
+                    AutomationProperties.IsInAccessibleTree="true"
                     HorizontalOptions="Center"
                     Text="{Binding Entry.Date, StringFormat='{0:M}'}" />
-                <Label
-                    x:Name="rating"
+                <Image
+                    AutomationProperties.HelpText="{Binding Entry.Rating, StringFormat='{0} star rating'}"
+                    AutomationProperties.IsInAccessibleTree="true"
                     HorizontalOptions="Center"
-                    Text="{Binding Entry.Rating, StringFormat='{0} star rating'}" />
+                    Source="{Binding Entry.Rating, Converter={StaticResource RatingToStartImageNameConverter}}" />
                 <Label
                     x:Name="notes"
+                    AutomationProperties.HelpText="Notes from trip"
+                    AutomationProperties.IsInAccessibleTree="true"
                     HorizontalOptions="Center"
                     Text="{Binding Entry.Notes}" />
             </StackLayout>
