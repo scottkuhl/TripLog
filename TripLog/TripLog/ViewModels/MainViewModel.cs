@@ -1,22 +1,29 @@
-﻿using System;
+﻿using Akavache;
+using System;
 using System.Collections.ObjectModel;
-using System.Threading.Tasks;
 using TripLog.Models;
 using TripLog.Services;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace TripLog.ViewModels
 {
     public class MainViewModel : BaseViewModel
     {
-        private ObservableCollection<TripLogEntry> _logEntries;
+        private readonly IBlobCache _cache;
+        private readonly ITripLogDataService _tripLogService;
 
+        private ObservableCollection<TripLogEntry> _logEntries;
+        private Command _newCommand;
         private Command _refreshCommand;
 
-        public MainViewModel(INavService navService)
+        public MainViewModel(INavService navService, ITripLogDataService tripLogService, IBlobCache cache)
                     : base(navService)
         {
+            _tripLogService = tripLogService;
+            _cache = cache;
             LogEntries = new ObservableCollection<TripLogEntry>();
+            Connectivity.ConnectivityChanged += Connectivity_ConnectivityChanged;
         }
 
         public ObservableCollection<TripLogEntry> LogEntries
@@ -29,8 +36,7 @@ namespace TripLog.ViewModels
             }
         }
 
-        public Command NewCommand => new Command(async () => await NavService.NavigateTo<NewEntryViewModel>());
-
+        public Command NewCommand => _newCommand ?? (_newCommand = new Command(async () => await NavService.NavigateTo<NewEntryViewModel>(), CanNew));
         public Command RefreshCommand => _refreshCommand ?? (_refreshCommand = new Command(LoadEntries));
 
         public Command<TripLogEntry> ViewCommand => new Command<TripLogEntry>(async entry => await NavService.NavigateTo<DetailViewModel, TripLogEntry>(entry));
@@ -40,47 +46,35 @@ namespace TripLog.ViewModels
             LoadEntries();
         }
 
+        private bool CanNew() => Connectivity.NetworkAccess == NetworkAccess.Internet;
+
+        private void Connectivity_ConnectivityChanged(object sender, ConnectivityChangedEventArgs e)
+        {
+            NewCommand.ChangeCanExecute();
+        }
+
         private void LoadEntries()
         {
             if (IsBusy)
             {
                 return;
             }
-            IsBusy = true;
-            LogEntries.Clear();
 
-            // TODO: Remove this in chapter 6
-            Task.Delay(3000).ContinueWith(_ => Device.BeginInvokeOnMainThread(() =>
+            IsBusy = true;
+
+            try
             {
-                LogEntries.Add(new TripLogEntry
-                {
-                    Title = "Washington Monument",
-                    Notes = "Amazing!",
-                    Rating = 3,
-                    Date = new DateTime(2019, 2, 5),
-                    Latitude = 38.8895,
-                    Longitude = -77.0352
-                });
-                LogEntries.Add(new TripLogEntry
-                {
-                    Title = "Statue of Liberty",
-                    Notes = "Inspiring!",
-                    Rating = 4,
-                    Date = new DateTime(2019, 4, 13),
-                    Latitude = 40.6892,
-                    Longitude = -74.0444
-                });
-                LogEntries.Add(new TripLogEntry
-                {
-                    Title = "Golden Gate Bridge",
-                    Notes = "Foggy, but beautiful.",
-                    Rating = 5,
-                    Date = new DateTime(2019, 4, 26),
-                    Latitude = 37.8268,
-                    Longitude = -122.4798
-                });
+                _cache.GetAndFetchLatest("entries", async () => await _tripLogService.GetEntriesAsync())
+                    .Subscribe(entries =>
+                    {
+                        LogEntries = new ObservableCollection<TripLogEntry>(entries);
+                        IsBusy = false;
+                    });
+            }
+            finally
+            {
                 IsBusy = false;
-            }));
+            }
         }
     }
 }
