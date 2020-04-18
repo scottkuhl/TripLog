@@ -4,6 +4,8 @@ using Android.OS;
 using Android.Runtime;
 using TripLog.Droid.Modules;
 
+[assembly: MetaData("com.google.android.maps.v2.API_KEY", Value = TripLog.App.GoogleMapsKey)]
+
 namespace TripLog.Droid
 {
     [Activity(Label = "TripLog", Icon = "@mipmap/icon", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
@@ -25,6 +27,7 @@ namespace TripLog.Droid
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
+            global::Xamarin.Auth.Presenters.XamarinAndroid.AuthenticationConfiguration.Init(this, savedInstanceState);
             Xamarin.FormsMaps.Init(this, savedInstanceState);
             LoadApplication(new App(new TripLogPlatformModule()));
         }

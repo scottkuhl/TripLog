@@ -11,6 +11,7 @@
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Command="{Binding NewCommand}" Text="New" />
+        <ToolbarItem Command="{Binding SignOutCommand}" Text="Sign out" />
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>

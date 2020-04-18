@@ -38,7 +38,7 @@ namespace TripLog.ViewModels
 
         public Command NewCommand => _newCommand ?? (_newCommand = new Command(async () => await NavService.NavigateTo<NewEntryViewModel>(), CanNew));
         public Command RefreshCommand => _refreshCommand ?? (_refreshCommand = new Command(LoadEntries));
-
+        public Command SignOutCommand => new Command(_tripLogService.Unauthenticate);
         public Command<TripLogEntry> ViewCommand => new Command<TripLogEntry>(async entry => await NavService.NavigateTo<DetailViewModel, TripLogEntry>(entry));
 
         public override void Init()

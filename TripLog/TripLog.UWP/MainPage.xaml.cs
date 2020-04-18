@@ -7,7 +7,8 @@ namespace TripLog.UWP
         public MainPage()
         {
             this.InitializeComponent();
-            Xamarin.FormsMaps.Init("YOUR-MAPS-API-KEY-HERE");
+            Xamarin.Auth.Presenters.UWP.AuthenticationConfiguration.Init();
+            Xamarin.FormsMaps.Init(TripLog.App.BingMapsKey);
             LoadApplication(new TripLog.App(new TripLogPlatformModule()));
         }
     }
