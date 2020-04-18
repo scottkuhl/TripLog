@@ -1,4 +1,5 @@
-﻿using TripLog.Models;
+﻿using TripLog.Exceptions;
+using TripLog.Models;
 using TripLog.Services;
 
 namespace TripLog.ViewModels
@@ -20,6 +21,11 @@ namespace TripLog.ViewModels
                 _entry = value;
                 OnPropertyChanged();
             }
+        }
+
+        public override void Init()
+        {
+            throw new EntryNotProvidedException();
         }
 
         public override void Init(TripLogEntry parameter)
