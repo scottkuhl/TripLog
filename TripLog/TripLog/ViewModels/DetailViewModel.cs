@@ -8,8 +8,8 @@ namespace TripLog.ViewModels
     {
         private TripLogEntry _entry;
 
-        public DetailViewModel(INavService navService)
-            : base(navService)
+        public DetailViewModel(INavService navService, IAnalyticsService analyticsService)
+            : base(navService, analyticsService)
         {
         }
 

@@ -17,12 +17,14 @@ namespace TripLog.Modules
             Bind<NewEntryViewModel>().ToSelf();
 
             // Core Services
+
             var apiAuthToken = Preferences.Get("apitoken", "");
             var tripLogService = new TripLogApiDataService(new Uri(App.API), apiAuthToken);
             Bind<ITripLogDataService>().ToMethod(x => tripLogService).InSingletonScope();
 
             Bind<Akavache.IBlobCache>().ToConstant(Akavache.BlobCache.LocalMachine);
             Bind<IAuthService>().To<AuthService>().InSingletonScope();
+            Bind<IAnalyticsService>().To<AppCenterAnalyticsService>().InSingletonScope();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using TripLog.Services;
 using Xamarin.Forms;
 
@@ -11,8 +12,8 @@ namespace TripLog.ViewModels
 
         private Command _signInCommand;
 
-        public SignInViewModel(INavService navService, IAuthService authService, ITripLogDataService tripLogService)
-                    : base(navService)
+        public SignInViewModel(INavService navService, IAuthService authService, ITripLogDataService tripLogService, IAnalyticsService analyticsService)
+                    : base(navService, analyticsService)
         {
             _authService = authService;
             _tripLogService = tripLogService;
@@ -33,7 +34,10 @@ namespace TripLog.ViewModels
                 },
                 errorCallback: e =>
                 {
-                    // TODO: Handle invalid authentication here
+                    AnalyticsService.TrackEvent(e, new Dictionary<string, string>
+                    {
+                        { "Method", "SignInViewModel.SignIn()" }
+                    });
                 });
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using TripLog.Models;
 using TripLog.Services;
@@ -19,8 +20,8 @@ namespace TripLog.ViewModels
         private Command _saveCommand;
         private string _title;
 
-        public NewEntryViewModel(INavService navService, ILocationService locService, ITripLogDataService tripLogService)
-            : base(navService)
+        public NewEntryViewModel(INavService navService, ILocationService locService, ITripLogDataService tripLogService, IAnalyticsService analyticsService)
+            : base(navService, analyticsService)
         {
             _locService = locService;
             _tripLogService = tripLogService;
@@ -103,9 +104,12 @@ namespace TripLog.ViewModels
                 Latitude = coords.Latitude;
                 Longitude = coords.Longitude;
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                // TODO: handle exceptions from location service
+                AnalyticsService.TrackError(e, new Dictionary<string, string>
+                {
+                    { "Method", "NewEntryViewModel.Init()" }
+                });
             }
         }
 
@@ -130,6 +134,13 @@ namespace TripLog.ViewModels
 
                 await _tripLogService.AddEntryAsync(newItem);
                 await NavService.GoBack();
+            }
+            catch (Exception e)
+            {
+                AnalyticsService.TrackError(e, new Dictionary<string, string>
+                {
+                    { "Method", "NewEntryViewModel.Save()" }
+                });
             }
             finally
             {

@@ -8,9 +8,10 @@ namespace TripLog.ViewModels
     {
         private bool _isBusy;
 
-        protected BaseViewModel(INavService navService)
+        protected BaseViewModel(INavService navService, IAnalyticsService analyticsService)
         {
             NavService = navService;
+            AnalyticsService = analyticsService;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -25,6 +26,7 @@ namespace TripLog.ViewModels
             }
         }
 
+        protected IAnalyticsService AnalyticsService { get; private set; }
         protected INavService NavService { get; private set; }
 
         public virtual void Init()
@@ -39,8 +41,8 @@ namespace TripLog.ViewModels
 
     public class BaseViewModel<TParameter> : BaseViewModel
     {
-        protected BaseViewModel(INavService navService)
-            : base(navService)
+        protected BaseViewModel(INavService navService, IAnalyticsService analyticsService)
+            : base(navService, analyticsService)
         {
         }
 

@@ -1,4 +1,7 @@
-﻿using Ninject;
+﻿using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
+using Ninject;
 using Ninject.Modules;
 using TripLog.Modules;
 using TripLog.Services;
@@ -12,6 +15,9 @@ namespace TripLog
     public partial class App : Application
     {
         public const string API = "https://YOUR_URL_HERE.azurewebsites.net/";
+        public const string AppCenterAndroidAppSecret = "YOUR_APP_SECRET_HERE";
+        public const string AppCenterIosAppSecret = "YOUR_APP_SECRET_HERE";
+        public const string AppCenterUwpAppSecret = "YOUR_APP_SECRET_HERE";
         public const string BingMapsKey = "YOUR_KEY_HERE";
         public const string FacebookAppId = "YOUR_APP_ID_HERE";
         public const string GoogleMapsKey = "YOUR_KEY_HERE";
@@ -46,6 +52,10 @@ namespace TripLog
 
         protected override void OnStart()
         {
+            AppCenter.Start("ios={Your iOS app secret here};"
+                + "android={Your Android app secret here};"
+                + "uwp={Your UWP app secret here}",
+                typeof(Analytics), typeof(Crashes));
         }
 
         private void OnSignIn(string accessToken)
